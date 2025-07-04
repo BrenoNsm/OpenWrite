@@ -120,7 +120,24 @@
                         <button id="alignLeftBtn" title="Alinhar Esquerda"><i class="fas fa-align-left"></i></button>
                         <button id="alignCenterBtn" title="Alinhar Centro"><i class="fas fa-align-center"></i></button>
                         <button id="alignRightBtn" title="Alinhar Direita"><i class="fas fa-align-right"></i></button>
-                        <button id="alignJustifyBtn" title="Justificar"><i class="fas fa-align-justify"></i></button>
+                    <button id="alignJustifyBtn" title="Justificar"><i class="fas fa-align-justify"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <select id="lineHeightSelect" title="Espaçamento entre Linhas">
+                            <option value="1">1</option>
+                            <option value="1.15">1.15</option>
+                            <option value="1.5">1.5</option>
+                            <option value="1.8" selected>1.8</option>
+                            <option value="2">2</option>
+                        </select>
+                        <select id="paragraphSpacingSelect" title="Espaçamento entre Parágrafos">
+                            <option value="0">0</option>
+                            <option value="0.5em">0.5em</option>
+                            <option value="1em" selected>1em</option>
+                            <option value="1.5em">1.5em</option>
+                            <option value="2em">2em</option>
+                        </select>
                     </div>
 
                     <div class="toolbar-group">
@@ -192,6 +209,61 @@
             <div class="modal-footer">
                 <button id="applyPageSetupBtn">Aplicar</button>
                 <button id="cancelPageSetupBtn" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="linkModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Link</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="linkUrl">URL:</label>
+                    <input type="text" id="linkUrl">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertLink">Inserir</button>
+                <button id="cancelInsertLink" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Imagem</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="imageUrl">URL da Imagem:</label>
+                    <input type="text" id="imageUrl">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertImage">Inserir</button>
+                <button id="cancelInsertImage" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tableModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Tabela</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tableRows">Linhas:</label>
+                    <input type="number" id="tableRows" min="1" value="3">
+                </div>
+                <div class="form-group">
+                    <label for="tableCols">Colunas:</label>
+                    <input type="number" id="tableCols" min="1" value="3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertTable">Inserir</button>
+                <button id="cancelInsertTable" class="secondary-button">Cancelar</button>
             </div>
         </div>
     </div>

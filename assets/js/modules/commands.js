@@ -29,37 +29,98 @@ export const applyCommand = (command, value = null) => {
 };
 
 // Funções para comandos específicos que exigem HTML customizado
-export const insertTable = () => {
-    const rows = prompt('Número de linhas:', '3');
-    const cols = prompt('Número de colunas:', '3');
-    if (rows && cols && !isNaN(rows) && !isNaN(cols)) {
+export const openLinkModal = () => {
+    saveSelection();
+    elements.linkUrl.value = '';
+    elements.linkModal.classList.add('open');
+    elements.linkUrl.focus();
+};
+
+export const openImageModal = () => {
+    saveSelection();
+    elements.imageUrl.value = '';
+    elements.imageModal.classList.add('open');
+    elements.imageUrl.focus();
+};
+
+export const openTableModal = () => {
+    saveSelection();
+    elements.tableRows.value = '3';
+    elements.tableCols.value = '3';
+    elements.tableModal.classList.add('open');
+    elements.tableRows.focus();
+};
+
+const closeModal = (modal) => modal.classList.remove('open');
+
+const insertTableHtml = () => {
+    const rows = parseInt(elements.tableRows.value, 10);
+    const cols = parseInt(elements.tableCols.value, 10);
+    if (rows > 0 && cols > 0) {
         let tableHtml = '<table style="width:100%; border-collapse: collapse;"><tbody>';
-        for (let r = 0; r < parseInt(rows); r++) {
+        for (let r = 0; r < rows; r++) {
             tableHtml += '<tr>';
-            for (let c = 0; c < parseInt(cols); c++) {
-                // Adiciona um estilo básico para a célula e um <br> para facilitar a seleção
+            for (let c = 0; c < cols; c++) {
                 tableHtml += '<td style="border: 1px solid #ccc; padding: 8px;">&nbsp;</td>';
             }
             tableHtml += '</tr>';
         }
         tableHtml += '</tbody></table>';
-        elements.editor.focus();
-        document.execCommand('insertHTML', false, tableHtml);
-    } else {
-        alert('Por favor, insira números válidos para linhas e colunas.');
+        applyCommand('insertHTML', tableHtml);
     }
+    closeModal(elements.tableModal);
 };
 
-export const createLink = () => {
-    const url = prompt('Digite a URL para o link:');
+const insertLinkFromModal = () => {
+    const url = elements.linkUrl.value.trim();
     if (url) {
         applyCommand('createLink', url);
     }
+    closeModal(elements.linkModal);
 };
 
-export const insertImage = () => {
-    const imageUrl = prompt('Digite a URL da imagem:');
-    if (imageUrl) {
-        applyCommand('insertImage', imageUrl);
+const insertImageFromModal = () => {
+    const url = elements.imageUrl.value.trim();
+    if (url) {
+        applyCommand('insertImage', url);
+    }
+    closeModal(elements.imageModal);
+};
+
+export const initInsertModals = () => {
+    if (elements.confirmInsertLink) {
+        elements.confirmInsertLink.addEventListener('click', insertLinkFromModal);
+    }
+    if (elements.cancelInsertLink) {
+        elements.cancelInsertLink.addEventListener('click', () => closeModal(elements.linkModal));
+    }
+    if (elements.linkModal) {
+        const closeBtn = elements.linkModal.querySelector('.close-button');
+        if (closeBtn) closeBtn.addEventListener('click', () => closeModal(elements.linkModal));
+        elements.linkModal.addEventListener('click', (e) => { if (e.target === elements.linkModal) closeModal(elements.linkModal); });
+    }
+
+    if (elements.confirmInsertImage) {
+        elements.confirmInsertImage.addEventListener('click', insertImageFromModal);
+    }
+    if (elements.cancelInsertImage) {
+        elements.cancelInsertImage.addEventListener('click', () => closeModal(elements.imageModal));
+    }
+    if (elements.imageModal) {
+        const closeBtn = elements.imageModal.querySelector('.close-button');
+        if (closeBtn) closeBtn.addEventListener('click', () => closeModal(elements.imageModal));
+        elements.imageModal.addEventListener('click', (e) => { if (e.target === elements.imageModal) closeModal(elements.imageModal); });
+    }
+
+    if (elements.confirmInsertTable) {
+        elements.confirmInsertTable.addEventListener('click', insertTableHtml);
+    }
+    if (elements.cancelInsertTable) {
+        elements.cancelInsertTable.addEventListener('click', () => closeModal(elements.tableModal));
+    }
+    if (elements.tableModal) {
+        const closeBtn = elements.tableModal.querySelector('.close-button');
+        if (closeBtn) closeBtn.addEventListener('click', () => closeModal(elements.tableModal));
+        elements.tableModal.addEventListener('click', (e) => { if (e.target === elements.tableModal) closeModal(elements.tableModal); });
     }
 };
