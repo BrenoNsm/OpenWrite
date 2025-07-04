@@ -2,10 +2,13 @@
 
 import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js'; // Precisará desta importação
+import { createPage, attachPageEvents } from './pagination.js';
 
 export const newDocument = () => {
     if (confirm("Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.")) {
-        elements.editor.innerHTML = '<p>Novo documento.</p>';
+        elements.editor.innerHTML = '';
+        const page = createPage();
+        page.innerHTML = '<p>Novo documento.</p>';
         elements.documentTitle.textContent = 'Documento Sem Título';
         updateToolbarState(); // Atualiza a toolbar para o novo estado
     }
@@ -130,6 +133,7 @@ export const loadDocument = () => {
             const documentData = JSON.parse(localStorage.getItem(`editor_doc_${docToLoad}`));
             if (documentData && documentData.content) {
                 elements.editor.innerHTML = documentData.content;
+                elements.editor.querySelectorAll('.editor-area').forEach(attachPageEvents);
                 elements.documentTitle.textContent = documentData.title || docToLoad;
                 updateToolbarState(); // Atualiza a toolbar para o documento carregado
                 alert(`Documento "${docToLoad}" carregado com sucesso!`);
