@@ -124,20 +124,21 @@
                     </div>
 
                     <div class="toolbar-group">
-                        <select id="lineHeightSelect" title="Espaçamento entre Linhas">
-                            <option value="1">1</option>
-                            <option value="1.15">1.15</option>
-                            <option value="1.5">1.5</option>
-                            <option value="1.8" selected>1.8</option>
-                            <option value="2">2</option>
-                        </select>
-                        <select id="paragraphSpacingSelect" title="Espaçamento entre Parágrafos">
-                            <option value="0">0</option>
-                            <option value="0.5em">0.5em</option>
-                            <option value="1em" selected>1em</option>
-                            <option value="1.5em">1.5em</option>
-                            <option value="2em">2em</option>
-                        </select>
+
+                        <div class="dropdown">
+                            <button id="spacingBtn" title="Espaçamento de Linha"><i class="fas fa-text-height"></i></button>
+                            <div id="spacingMenu" class="dropdown-menu">
+                                <button class="line-option" data-value="1">1</button>
+                                <button class="line-option" data-value="1.15">1.15</button>
+                                <button class="line-option" data-value="1.5">1.5</button>
+                                <button class="line-option" data-value="1.8">1.8</button>
+                                <button class="line-option" data-value="2">2</button>
+                                <hr>
+                                <button id="increaseSpacing">Aumentar Espaço</button>
+                                <button id="decreaseSpacing">Diminuir Espaço</button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="toolbar-group">

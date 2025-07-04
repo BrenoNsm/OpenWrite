@@ -20,8 +20,12 @@ export const elements = {
     formatBlockSelect: document.getElementById('formatBlockSelect'),
     fontSizeSelect: document.getElementById('fontSizeSelect'),
 
-    lineHeightSelect: document.getElementById('lineHeightSelect'),
-    paragraphSpacingSelect: document.getElementById('paragraphSpacingSelect'),
+
+    spacingBtn: document.getElementById('spacingBtn'),
+    spacingMenu: document.getElementById('spacingMenu'),
+    lineOptions: document.querySelectorAll('#spacingMenu .line-option'),
+    increaseSpacing: document.getElementById('increaseSpacing'),
+    decreaseSpacing: document.getElementById('decreaseSpacing'),
 
     // Elementos para os seletores de cor personalizados
     foreColorBtn: document.getElementById('foreColorBtn'),
