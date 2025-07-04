@@ -41,6 +41,7 @@ const placeCaretAtStart = (el) => {
     sel.addRange(range);
 };
 
+
 const getLastTextNode = (node) => {
     if (!node) return null;
     if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
@@ -101,6 +102,7 @@ const handleInput = (e) => {
         } else {
             break;
         }
+
     }
 };
 
