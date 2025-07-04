@@ -70,10 +70,6 @@ export const initSpacingControls = () => {
             const value = parseFloat(currentSettings.paragraphSpacing);
             currentSettings.paragraphSpacing = `${(value + 0.5).toFixed(1)}em`;
 
-    if (elements.lineHeightSelect) {
-        elements.lineHeightSelect.addEventListener('change', (e) => {
-            currentSettings.lineHeight = e.target.value;
-
             applySettings();
             saveSettings();
         });
