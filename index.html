@@ -6,6 +6,7 @@
     <title>Meu Editor de Documentos</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -16,6 +17,17 @@
                     <button id="newDocBtn" title="Novo Documento"><i class="fas fa-file"></i> Novo</button>
                     <button id="saveDocBtn" title="Salvar Documento (Ctrl+S)"><i class="fas fa-save"></i> Salvar</button>
                     <button id="loadDocBtn" title="Abrir Documento"><i class="fas fa-folder-open"></i> Abrir</button>
+                    <button id="downloadOwdBtn" title="Baixar Arquivo"><i class="fas fa-download"></i> Baixar</button>
+                    <label for="uploadOwdInput" class="file-upload-label" title="Carregar Arquivo"><i class="fas fa-upload"></i> Carregar</label>
+                    <input type="file" id="uploadOwdInput" accept=".owd" style="display:none">
+                    <div class="dropdown">
+                        <button id="exportBtn" title="Exportar"><i class="fas fa-share-square"></i> Exportar</button>
+                        <div id="exportMenu" class="dropdown-menu">
+                            <button id="exportPdf">PDF</button>
+                            <button id="exportDoc">Word</button>
+                            <button id="exportOdt">ODF</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -97,10 +109,9 @@
                                 <div class="custom-color-row">
                                     <input type="color" class="custom-color-input" value="#FFFF00">
                                     <span>Personalizar</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
 
                     <div class="toolbar-group">
                         <button id="boldBtn" title="Negrito (Ctrl+B)"><i class="fas fa-bold"></i></button>
@@ -120,7 +131,23 @@
                         <button id="alignLeftBtn" title="Alinhar Esquerda"><i class="fas fa-align-left"></i></button>
                         <button id="alignCenterBtn" title="Alinhar Centro"><i class="fas fa-align-center"></i></button>
                         <button id="alignRightBtn" title="Alinhar Direita"><i class="fas fa-align-right"></i></button>
-                        <button id="alignJustifyBtn" title="Justificar"><i class="fas fa-align-justify"></i></button>
+                    <button id="alignJustifyBtn" title="Justificar"><i class="fas fa-align-justify"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <div class="dropdown">
+                            <button id="spacingBtn" title="Espaçamento de Linha"><i class="fas fa-text-height"></i></button>
+                            <div id="spacingMenu" class="dropdown-menu">
+                                <button class="line-option" data-value="1">1</button>
+                                <button class="line-option" data-value="1.15">1.15</button>
+                                <button class="line-option" data-value="1.5">1.5</button>
+                                <button class="line-option" data-value="1.8">1.8</button>
+                                <button class="line-option" data-value="2">2</button>
+                                <hr>
+                                <button id="increaseSpacing">Aumentar Espaço</button>
+                                <button id="decreaseSpacing">Diminuir Espaço</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="toolbar-group">
@@ -140,12 +167,12 @@
 
         <div class="paper-container">
             <div id="editor" class="editor-area" contenteditable="true" spellcheck="false">
-                <p>Este é o seu novo documento. Digite o conteúdo aqui, assim como você faria em uma folha de papel.</p>
-                <p>Experimente as novas ferramentas e o visual aprimorado!</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
-            </div>
+                    <p>Este é o seu novo documento. Digite o conteúdo aqui, assim como você faria em uma folha de papel.</p>
+                    <p>Experimente as novas ferramentas e o visual aprimorado!</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+                </div>
         </div>
     </div>
 
@@ -192,6 +219,61 @@
             <div class="modal-footer">
                 <button id="applyPageSetupBtn">Aplicar</button>
                 <button id="cancelPageSetupBtn" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="linkModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Link</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="linkUrl">URL:</label>
+                    <input type="text" id="linkUrl">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertLink">Inserir</button>
+                <button id="cancelInsertLink" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Imagem</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="imageUrl">URL da Imagem:</label>
+                    <input type="text" id="imageUrl">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertImage">Inserir</button>
+                <button id="cancelInsertImage" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tableModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Inserir Tabela</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tableRows">Linhas:</label>
+                    <input type="number" id="tableRows" min="1" value="3">
+                </div>
+                <div class="form-group">
+                    <label for="tableCols">Colunas:</label>
+                    <input type="number" id="tableCols" min="1" value="3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmInsertTable">Inserir</button>
+                <button id="cancelInsertTable" class="secondary-button">Cancelar</button>
             </div>
         </div>
     </div>
