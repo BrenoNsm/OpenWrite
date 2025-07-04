@@ -4,6 +4,11 @@ import { elements } from './domElements.js';
 
 let savedSelectionRange = null; // Para salvar a seleção antes de abrir o pop-up ou executar comandos específicos
 
+const focusActivePage = () => {
+    const last = elements.editor.querySelector('.editor-area:last-child');
+    if (last) last.focus();
+};
+
 // Salva a seleção atual do editor
 export const saveSelection = () => {
     const selection = window.getSelection();
@@ -25,7 +30,7 @@ export const applyCommand = (command, value = null) => {
     }
 
     document.execCommand(command, false, value);
-    elements.editor.focus(); // Mantém o foco no editor
+    focusActivePage(); // Mantém o foco no editor ativo
 };
 
 // Funções para comandos específicos que exigem HTML customizado
