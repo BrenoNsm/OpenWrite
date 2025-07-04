@@ -2,6 +2,7 @@ import { elements } from './domElements.js';
 
 const PX_PER_CM = 96 / 2.54;
 const MAX_ITERATIONS = 30; // evita loops infinitos quando o conteúdo é muito grande
+
 let currentSettings = {
     widthCm: 21,
     heightCm: 29.7,
@@ -95,6 +96,7 @@ const handleInput = (e) => {
         if (remainder.textContent) {
             next.insertBefore(remainder, next.firstChild);
         } else {
+
             // Se não couber nada, move o próprio nó
             next.insertBefore(textNode, next.firstChild);
         }
@@ -102,6 +104,7 @@ const handleInput = (e) => {
         placeCaretAtStart(next);
 
         if (next.scrollHeight > maxHeightPx) {
+
             // Continua verificando a próxima página
             page = next;
         } else {
@@ -109,6 +112,7 @@ const handleInput = (e) => {
         }
 
         iterations++;
+
     }
 };
 

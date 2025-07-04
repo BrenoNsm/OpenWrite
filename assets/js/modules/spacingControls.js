@@ -44,7 +44,6 @@ const applySettings = () => {
 export const initSpacingControls = () => {
     loadSettings();
     applySettings();
-
     if (elements.spacingBtn) {
         elements.spacingBtn.addEventListener('click', () => {
             if (elements.spacingMenu) elements.spacingMenu.classList.toggle('open');
@@ -66,6 +65,7 @@ export const initSpacingControls = () => {
         elements.increaseSpacing.addEventListener('click', () => {
             const value = parseFloat(currentSettings.paragraphSpacing);
             currentSettings.paragraphSpacing = `${(value + 0.5).toFixed(1)}em`;
+
             applySettings();
             saveSettings();
         });
