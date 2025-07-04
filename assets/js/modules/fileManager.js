@@ -82,16 +82,23 @@ export const exportAsPdf = () => {
         alert('Biblioteca jsPDF não carregada.');
         return;
     }
-    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
+    if (!window.html2canvas) {
+        alert('Biblioteca html2canvas não carregada.');
+        return;
+    }
+
+    const doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
 
     doc.html(elements.editor, {
         callback: () => {
             doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
         },
-        x: 40,
-        y: 40,
-        html2canvas: { scale: 0.8 },
-
+        x: 10,
+        y: 10,
+        width: pageWidth - 20,
+        windowWidth: elements.editor.scrollWidth,
+        html2canvas: { scale: 1 },
     });
 };
 
