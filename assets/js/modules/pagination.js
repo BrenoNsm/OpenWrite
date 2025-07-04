@@ -1,8 +1,7 @@
 import { elements } from './domElements.js';
 
 const PX_PER_CM = 96 / 2.54;
-const MAX_ITERATIONS = 30; // evita loops infinitos quando o conteúdo é muito grande
-
+const MAX_ITERATIONS = 40; // segurança contra loops infinitos
 let currentSettings = {
     widthCm: 21,
     heightCm: 29.7,
@@ -33,88 +32,57 @@ export const createPage = () => {
     return page;
 };
 
-const placeCaretAtStart = (el) => {
-    el.focus();
-    const range = document.createRange();
-    range.setStart(el, 0);
-    range.collapse(true);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-};
-
-const getLastTextNode = (node) => {
-    if (!node) return null;
-    if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
-        return node;
-    }
-    for (let i = node.childNodes.length - 1; i >= 0; i--) {
-        const child = getLastTextNode(node.childNodes[i]);
-        if (child) return child;
-    }
-    return null;
-};
-
-const splitTextNodeToFit = (page, textNode, maxHeightPx) => {
-    const original = textNode.textContent;
-    let low = 0;
-    let high = original.length;
-    let index = 0;
-
-    while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        textNode.textContent = original.slice(0, mid);
-        if (page.scrollHeight > maxHeightPx) {
-            high = mid - 1;
-        } else {
-            index = mid;
-            low = mid + 1;
-        }
-    }
-
-    textNode.textContent = original.slice(0, index);
-    return document.createTextNode(original.slice(index));
-};
-
-const handleInput = (e) => {
-    let page = e.currentTarget;
+const rebalancePages = () => {
+    const pages = Array.from(elements.editor.querySelectorAll('.editor-area'));
+    if (pages.length === 0) return;
     const maxHeightPx = currentSettings.heightCm * PX_PER_CM;
     let iterations = 0;
 
-    while (page.scrollHeight > maxHeightPx && iterations < MAX_ITERATIONS) {
-        // Se a página tem apenas um filho e ainda está maior que o permitido,
-        // interrompe para evitar um loop infinito (conteúdo grande demais).
-        if (page.childNodes.length <= 1) break;
-
-        let next = page.nextElementSibling;
-        if (!next) next = createPage();
-
-        const textNode = getLastTextNode(page);
-        if (!textNode) break;
-
-        const remainder = splitTextNodeToFit(page, textNode, maxHeightPx);
-        if (remainder.textContent) {
-            next.insertBefore(remainder, next.firstChild);
-        } else {
-
-            // Se não couber nada, move o próprio nó
-            next.insertBefore(textNode, next.firstChild);
+    // Passo 1: mover excesso para páginas seguintes
+    for (let i = 0; i < pages.length && iterations < MAX_ITERATIONS; i++) {
+        let page = pages[i];
+        while (page.scrollHeight > maxHeightPx && page.childNodes.length > 1 && iterations < MAX_ITERATIONS) {
+            let next = pages[i + 1];
+            if (!next) {
+                next = createPage();
+                pages.push(next);
+            }
+            next.insertBefore(page.lastChild, next.firstChild);
+            iterations++;
         }
+    }
 
-        placeCaretAtStart(next);
-
-        if (next.scrollHeight > maxHeightPx) {
-
-            // Continua verificando a próxima página
-            page = next;
-        } else {
-            break;
+    // Passo 2: remover páginas vazias
+    for (let i = pages.length - 1; i > 0; i--) {
+        if (pages[i].childNodes.length === 0 || pages[i].textContent.trim() === '') {
+            pages[i].remove();
+            pages.splice(i, 1);
         }
+    }
 
-        iterations++;
-
+    // Passo 3: puxar conteúdo se houver espaço
+    for (let i = pages.length - 1; i > 0 && iterations < MAX_ITERATIONS; i--) {
+        let prev = pages[i - 1];
+        let current = pages[i];
+        while (prev.scrollHeight < maxHeightPx && current.firstChild && iterations < MAX_ITERATIONS) {
+            prev.appendChild(current.firstChild);
+            if (prev.scrollHeight > maxHeightPx) {
+                current.insertBefore(prev.lastChild, current.firstChild);
+                break;
+            }
+            if (current.childNodes.length === 0 && i === pages.length - 1) {
+                current.remove();
+                pages.pop();
+                break;
+            }
+            iterations++;
+        }
     }
 };
+
+const handleInput = () => {
+    rebalancePages();
+}; 
 
 export const initPagination = () => {
     const pages = elements.editor.querySelectorAll('.editor-area');
@@ -123,6 +91,7 @@ export const initPagination = () => {
     } else {
         pages.forEach(attachPageEvents);
     }
+    rebalancePages();
 };
 
 export const updatePageSettings = (settings) => {
