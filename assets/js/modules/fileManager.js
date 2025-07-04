@@ -4,6 +4,27 @@ import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js'; // Precisará desta importação
 import { createPage, attachPageEvents } from './pagination.js';
 
+const getCleanText = () => {
+    let text = elements.editor.innerText || '';
+    text = text.replace(/\u00A0/g, ' ');
+    text = text.replace(/ {2,}/g, ' ');
+    const lines = text.split(/\r?\n/);
+    const result = [];
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed === '') {
+            if (result.length && result[result.length - 1] !== '') {
+                result.push('');
+            }
+        } else if (result.length && result[result.length - 1] !== '') {
+            result[result.length - 1] += ' ' + trimmed;
+        } else {
+            result.push(trimmed);
+        }
+    }
+    return result.join('\n\n');
+};
+
 export const newDocument = () => {
     if (confirm('Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.')) {
         elements.editor.innerHTML = '<p><br></p>';
@@ -82,16 +103,31 @@ export const exportAsPdf = () => {
         alert('Biblioteca jsPDF não carregada.');
         return;
     }
-    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
+    if (!window.html2canvas) {
+        alert('Biblioteca html2canvas não carregada.');
+        return;
+    }
 
-    doc.html(elements.editor, {
+    const doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const tempDiv = document.createElement('div');
+    const cleaned = getCleanText();
+    cleaned.split(/\n{2,}/).forEach((p) => {
+        const para = document.createElement('p');
+        para.textContent = p;
+        tempDiv.appendChild(para);
+    });
+
+    doc.html(tempDiv, {
         callback: () => {
             doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
         },
-        x: 40,
-        y: 40,
-        html2canvas: { scale: 0.8 },
-
+        x: 10,
+        y: 10,
+        width: pageWidth - 20,
+        windowWidth: elements.editor.scrollWidth,
+        html2canvas: { scale: 1 },
     });
 };
 
