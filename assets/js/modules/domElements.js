@@ -4,8 +4,6 @@ export const elements = {
     editor: document.getElementById('editor'),
     documentTitle: document.querySelector('.document-title'),
     newDocBtn: document.getElementById('newDocBtn'),
-    saveDocBtn: document.getElementById('saveDocBtn'),
-    loadDocBtn: document.getElementById('loadDocBtn'),
     downloadOwdBtn: document.getElementById('downloadOwdBtn'),
     uploadOwdInput: document.getElementById('uploadOwdInput'),
     exportBtn: document.getElementById('exportBtn'),
@@ -88,6 +86,7 @@ export const elements = {
 
     imageModal: document.getElementById('imageModal'),
     imageUrl: document.getElementById('imageUrl'),
+
     confirmInsertImage: document.getElementById('confirmInsertImage'),
     cancelInsertImage: document.getElementById('cancelInsertImage'),
 

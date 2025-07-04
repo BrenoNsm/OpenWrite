@@ -4,8 +4,6 @@ import { elements } from './modules/domElements.js';
 import { applyCommand, saveSelection, openLinkModal, openImageModal, openTableModal, initInsertModals } from './modules/commands.js';
 import {
     newDocument,
-    saveDocument,
-    loadDocument,
     exportAsOwd,
     importFromOwd,
     exportAsPdf,
@@ -17,6 +15,22 @@ import { initColorPickers } from './utils/colorPicker.js';
 import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o módulo do modal
 import { initSpacingControls } from './modules/spacingControls.js';
 
+const adjustIndent = (delta) => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    let node = range.startContainer;
+    if (node.nodeType === 3) node = node.parentNode;
+    while (node && node !== elements.editor && !/^(P|DIV|LI)$/i.test(node.nodeName)) {
+        node = node.parentNode;
+    }
+    if (!node || node === elements.editor) return;
+    const current = parseFloat(node.style.marginLeft) || 0;
+    const newMargin = Math.max(0, current + delta);
+    node.style.marginLeft = newMargin ? `${newMargin}em` : '';
+    updateToolbarState();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa todos os módulos
     initColorPickers();
@@ -27,8 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adiciona ouvintes de evento aos botões e controles (mantido como está)
     // Ações de Arquivo
     elements.newDocBtn.addEventListener('click', newDocument);
-    elements.saveDocBtn.addEventListener('click', saveDocument);
-    elements.loadDocBtn.addEventListener('click', loadDocument);
     if (elements.downloadOwdBtn) {
         elements.downloadOwdBtn.addEventListener('click', exportAsOwd);
     }
@@ -98,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.alignCenterBtn.addEventListener('click', () => applyCommand('justifyCenter')); // Corrigi o addEventListener
     elements.alignRightBtn.addEventListener('click', () => applyCommand('justifyRight'));
     elements.alignJustifyBtn.addEventListener('click', () => applyCommand('justifyFull'));
-    elements.indentBtn.addEventListener('click', () => applyCommand('indent'));
-    elements.outdentBtn.addEventListener('click', () => applyCommand('outdent'));
+    elements.indentBtn.addEventListener('click', () => adjustIndent(2));
+    elements.outdentBtn.addEventListener('click', () => adjustIndent(-2));
 
     // Inserir Objetos
     elements.quoteBtn.addEventListener('click', () => applyCommand('formatBlock', '<blockquote>'));
@@ -136,21 +148,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     event.preventDefault();
                     applyCommand('underline');
                     break;
-                case 's':
-                    event.preventDefault();
-                    saveDocument();
-                    break;
                 case 'L':
                     event.preventDefault();
                     openLinkModal();
                     break;
                 case '[':
                     event.preventDefault();
-                    applyCommand('outdent');
+                    adjustIndent(-2);
                     break;
                 case ']':
                     event.preventDefault();
-                    applyCommand('indent');
+                    adjustIndent(2);
                     break;
                 case 'p':
                     event.preventDefault();

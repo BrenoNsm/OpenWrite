@@ -376,6 +376,11 @@ body {
     margin: 20px 0;
 }
 
+.editor-area img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Estilos para a seleção de texto do navegador */
 ::selection {
     background-color: #b3d4fc;

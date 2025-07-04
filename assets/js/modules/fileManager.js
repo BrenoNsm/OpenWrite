@@ -5,12 +5,10 @@ import { updateToolbarState } from './toolbarState.js'; // Precisará desta impo
 import { createPage, attachPageEvents } from './pagination.js';
 
 export const newDocument = () => {
-    if (confirm("Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.")) {
-        elements.editor.innerHTML = '';
-        const page = createPage();
-        page.innerHTML = '<p>Novo documento.</p>';
+    if (confirm('Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.')) {
+        elements.editor.innerHTML = '<p><br></p>';
         elements.documentTitle.textContent = 'Documento Sem Título';
-        updateToolbarState(); // Atualiza a toolbar para o novo estado
+        updateToolbarState();
     }
 };
 
@@ -80,20 +78,20 @@ export const importFromOwd = (file) => {
 };
 
 export const exportAsPdf = () => {
-    if (!window.jspdf) {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
         alert('Biblioteca jsPDF não carregada.');
         return;
     }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
+
     doc.html(elements.editor, {
         callback: () => {
             doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
         },
-        x: 10,
-        y: 10,
-        width: 180,
-        windowWidth: elements.editor.scrollWidth,
+        x: 40,
+        y: 40,
+        html2canvas: { scale: 0.8 },
+
     });
 };
 

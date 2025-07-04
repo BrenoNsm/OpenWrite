@@ -44,6 +44,9 @@ export const openLinkModal = () => {
 export const openImageModal = () => {
     saveSelection();
     elements.imageUrl.value = '';
+    if (elements.imageFile) {
+        elements.imageFile.value = '';
+    }
     elements.imageModal.classList.add('open');
     elements.imageUrl.focus();
 };
@@ -85,11 +88,21 @@ const insertLinkFromModal = () => {
 };
 
 const insertImageFromModal = () => {
+    const file = elements.imageFile && elements.imageFile.files[0];
     const url = elements.imageUrl.value.trim();
-    if (url) {
-        applyCommand('insertImage', url);
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            applyCommand('insertHTML', `<img src="${reader.result}" style="max-width:100%;height:auto;">`);
+            closeModal(elements.imageModal);
+        };
+        reader.readAsDataURL(file);
+    } else if (url) {
+        applyCommand('insertHTML', `<img src="${url}" style="max-width:100%;height:auto;">`);
+        closeModal(elements.imageModal);
+    } else {
+        closeModal(elements.imageModal);
     }
-    closeModal(elements.imageModal);
 };
 
 export const initInsertModals = () => {
