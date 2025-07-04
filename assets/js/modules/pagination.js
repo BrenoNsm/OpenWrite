@@ -32,7 +32,6 @@ export const createPage = () => {
     return page;
 };
 
-
 const rebalancePages = () => {
     const pages = Array.from(elements.editor.querySelectorAll('.editor-area'));
     if (pages.length === 0) return;
