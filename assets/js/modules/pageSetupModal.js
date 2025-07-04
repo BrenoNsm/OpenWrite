@@ -2,6 +2,7 @@
 
 import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js';
+import { updatePageSettings } from './pagination.js';
 
 // Configurações padrão ABNT (cm)
 let currentPageSettings = {
@@ -55,21 +56,24 @@ const applyPageSettingsToEditor = () => {
         editorHeight = paper.width;
     }
 
-    // AQUI É A PARTE CRÍTICA DO JAVASCRIPT
-    // Garante que o container do papel tem a largura máxima do papel
-    elements.paperContainer.style.maxWidth = `${editorWidth}cm`; 
-    
-    // E que o editor-area DENTRO desse container tenha a largura definida pelo JS,
-    // permitindo que margin: auto no CSS centralize-o.
-    elements.editor.style.width = `${editorWidth}cm`; // <--- ATENÇÃO A ESTA LINHA!
+    // Garante que o container do papel tenha largura total
+    elements.paperContainer.style.maxWidth = "100%";
 
-    elements.editor.style.minHeight = `${editorHeight}cm`; // Altura mínima do papel
+    const pages = elements.editor.querySelectorAll('.editor-area');
+    pages.forEach(page => {
+        page.style.width = `${editorWidth}cm`;
+        page.style.minHeight = `${editorHeight}cm`;
+        page.style.paddingTop = `${margins.top}cm`;
+        page.style.paddingBottom = `${margins.bottom}cm`;
+        page.style.paddingLeft = `${margins.left}cm`;
+        page.style.paddingRight = `${margins.right}cm`;
+    });
 
-    // Aplica as margens ao padding do editor-area
-    elements.editor.style.paddingTop = `${margins.top}cm`;
-    elements.editor.style.paddingBottom = `${margins.bottom}cm`;
-    elements.editor.style.paddingLeft = `${margins.left}cm`;
-    elements.editor.style.paddingRight = `${margins.right}cm`;
+    updatePageSettings({
+        widthCm: editorWidth,
+        heightCm: editorHeight,
+        margins
+    });
 
     updateToolbarState();
 };

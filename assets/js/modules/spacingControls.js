@@ -44,7 +44,6 @@ const applySettings = () => {
 export const initSpacingControls = () => {
     loadSettings();
     applySettings();
-
     if (elements.spacingBtn) {
         elements.spacingBtn.addEventListener('click', () => {
             if (elements.spacingMenu) elements.spacingMenu.classList.toggle('open');
