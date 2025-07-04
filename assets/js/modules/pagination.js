@@ -44,15 +44,27 @@ const placeCaretAtStart = (el) => {
 const handleInput = (e) => {
     const page = e.currentTarget;
     const maxHeightPx = currentSettings.heightCm * PX_PER_CM;
+
+    if (page.scrollHeight <= maxHeightPx) return;
+
+    let next = page.nextElementSibling;
+    if (!next) next = createPage();
+
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    if (!page.contains(range.startContainer)) return;
+
+    const overflow = range.cloneRange();
+    overflow.setEndAfter(page.lastChild);
+    const fragment = overflow.extractContents();
+    next.insertBefore(fragment, next.firstChild);
+
+    placeCaretAtStart(next);
+
     if (page.scrollHeight > maxHeightPx) {
-        let next = page.nextElementSibling;
-        if (!next) {
-            next = createPage();
-        }
-        while (page.scrollHeight > maxHeightPx && page.lastChild) {
-            next.insertBefore(page.lastChild, next.firstChild);
-        }
-        placeCaretAtStart(next);
+        handleInput({ currentTarget: page });
+
     }
 };
 
