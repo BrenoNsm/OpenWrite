@@ -8,7 +8,6 @@ export const elements = {
     uploadOwdInput: document.getElementById('uploadOwdInput'),
     exportBtn: document.getElementById('exportBtn'),
     exportMenu: document.getElementById('exportMenu'),
-    exportPdf: document.getElementById('exportPdf'),
     exportDoc: document.getElementById('exportDoc'),
     exportOdt: document.getElementById('exportOdt'),
 

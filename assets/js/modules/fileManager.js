@@ -98,61 +98,6 @@ export const importFromOwd = (file) => {
     reader.readAsText(file);
 };
 
-const getCleanText = () => {
-    let text = elements.editor.innerText || '';
-    text = text.replace(/\u00A0/g, ' ');
-    text = text.replace(/ {2,}/g, ' ');
-    const lines = text.split(/\r?\n/);
-    const result = [];
-    for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed === '') {
-            if (result.length && result[result.length - 1] !== '') {
-                result.push('');
-            }
-        } else if (result.length && result[result.length - 1] !== '') {
-            result[result.length - 1] += ' ' + trimmed;
-        } else {
-            result.push(trimmed);
-        }
-    }
-    return result.join('\n\n');
-};
-
-export const exportAsPdf = () => {
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert('Biblioteca jsPDF não carregada.');
-        return;
-    }
-    if (!window.html2canvas) {
-        alert('Biblioteca html2canvas não carregada.');
-        return;
-    }
-
-    const doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    const tempDiv = document.createElement('div');
-    const cleaned = getCleanText();
-    cleaned.split(/\n{2,}/).forEach((p) => {
-        const para = document.createElement('p');
-        para.textContent = p;
-        tempDiv.appendChild(para);
-    });
-
-
-    doc.html(tempDiv, {
-        callback: () => {
-            doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
-        },
-        x: 10,
-        y: 10,
-        width: pageWidth - 20,
-        windowWidth: elements.editor.scrollWidth,
-        html2canvas: { scale: 1 },
-    });
-};
-
 export const exportAsDoc = () => {
     const html = `<html><head><meta charset="utf-8"></head><body>${elements.editor.innerHTML}</body></html>`;
     const blob = new Blob([html], {
