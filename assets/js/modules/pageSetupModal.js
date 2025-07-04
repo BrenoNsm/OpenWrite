@@ -57,7 +57,7 @@ const applyPageSettingsToEditor = () => {
 
     // AQUI É A PARTE CRÍTICA DO JAVASCRIPT
     // Garante que o container do papel tem a largura máxima do papel
-    elements.paperContainer.style.maxWidth = `${editorWidth}cm`; 
+    elements.paperContainer.style.maxWidth = "100%";
     
     // E que o editor-area DENTRO desse container tenha a largura definida pelo JS,
     // permitindo que margin: auto no CSS centralize-o.
