@@ -4,29 +4,108 @@ import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js'; // Precisará desta importação
 
 export const newDocument = () => {
-    if (confirm("Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.")) {
-        elements.editor.innerHTML = '<p>Novo documento.</p>';
+    if (confirm('Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.')) {
+        elements.editor.innerHTML = '<p><br></p>';
         elements.documentTitle.textContent = 'Documento Sem Título';
-        updateToolbarState(); // Atualiza a toolbar para o novo estado
+        updateToolbarState();
     }
 };
 
 export const saveDocument = () => {
-    const docName = prompt("Digite um nome para o documento:", elements.documentTitle.textContent);
+    const docName = prompt(
+        "Digite um nome para o documento:",
+        elements.documentTitle.textContent
+    );
     if (docName) {
         const documentData = {
             title: docName,
-            content: elements.editor.innerHTML
+            content: elements.editor.innerHTML,
         };
         try {
-            localStorage.setItem(`editor_doc_${docName}`, JSON.stringify(documentData));
+            localStorage.setItem(
+                `editor_doc_${docName}`,
+                JSON.stringify(documentData)
+            );
             elements.documentTitle.textContent = docName;
             alert(`Documento "${docName}" salvo com sucesso!`);
         } catch (e) {
-            alert("Erro ao salvar documento. Armazenamento local pode estar cheio ou desabilitado.");
+            alert(
+                "Erro ao salvar documento. Armazenamento local pode estar cheio ou desabilitado."
+            );
             console.error("Erro ao salvar:", e);
         }
     }
+};
+
+const downloadBlob = (blob, filename) => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+};
+
+export const exportAsOwd = () => {
+    const data = {
+        title: elements.documentTitle.textContent,
+        content: elements.editor.innerHTML,
+    };
+    const blob = new Blob([JSON.stringify(data)], {
+        type: 'application/x-openwrite',
+    });
+    const name = `${data.title || 'documento'}.owd`;
+    downloadBlob(blob, name);
+};
+
+export const importFromOwd = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data && data.content) {
+                elements.editor.innerHTML = data.content;
+                elements.documentTitle.textContent = data.title || 'Documento Sem Título';
+                updateToolbarState();
+            } else {
+                alert('Arquivo inválido.');
+            }
+        } catch (err) {
+            alert('Erro ao ler arquivo.');
+        }
+    };
+    reader.readAsText(file);
+};
+
+export const exportAsPdf = () => {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('Biblioteca jsPDF não carregada.');
+        return;
+    }
+    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
+    doc.html(elements.editor, {
+        callback: () => {
+            doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
+        },
+        x: 40,
+        y: 40,
+        html2canvas: { scale: 0.8 },
+    });
+};
+
+export const exportAsDoc = () => {
+    const html = `<html><head><meta charset="utf-8"></head><body>${elements.editor.innerHTML}</body></html>`;
+    const blob = new Blob([html], {
+        type: 'application/msword',
+    });
+    downloadBlob(blob, `${elements.documentTitle.textContent || 'documento'}.doc`);
+};
+
+export const exportAsOdt = () => {
+    const html = `<html><head><meta charset="utf-8"></head><body>${elements.editor.innerHTML}</body></html>`;
+    const blob = new Blob([html], {
+        type: 'application/vnd.oasis.opendocument.text',
+    });
+    downloadBlob(blob, `${elements.documentTitle.textContent || 'documento'}.odt`);
 };
 
 export const loadDocument = () => {

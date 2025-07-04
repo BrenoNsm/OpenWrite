@@ -1,22 +1,87 @@
 // assets/js/main.js
 
 import { elements } from './modules/domElements.js';
-import { applyCommand, saveSelection, createLink, insertImage, insertTable } from './modules/commands.js';
-import { newDocument, saveDocument, loadDocument } from './modules/fileManager.js';
+import { applyCommand, saveSelection, openLinkModal, openImageModal, openTableModal, initInsertModals } from './modules/commands.js';
+import {
+    newDocument,
+    exportAsOwd,
+    importFromOwd,
+    exportAsPdf,
+    exportAsDoc,
+    exportAsOdt,
+} from './modules/fileManager.js';
 import { updateToolbarState } from './modules/toolbarState.js';
 import { initColorPickers } from './utils/colorPicker.js';
 import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o módulo do modal
+import { initSpacingControls } from './modules/spacingControls.js';
+
+const adjustIndent = (delta) => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    let node = range.startContainer;
+    if (node.nodeType === 3) node = node.parentNode;
+    while (node && node !== elements.editor && !/^(P|DIV|LI)$/i.test(node.nodeName)) {
+        node = node.parentNode;
+    }
+    if (!node || node === elements.editor) return;
+    const current = parseFloat(node.style.marginLeft) || 0;
+    const newMargin = Math.max(0, current + delta);
+    node.style.marginLeft = newMargin ? `${newMargin}em` : '';
+    updateToolbarState();
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa todos os módulos
     initColorPickers();
     initPageSetupModal(); // CHAMA APENAS A INICIALIZAÇÃO, NÃO O ABRE DIRETO
+    initSpacingControls();
+    initInsertModals();
 
     // Adiciona ouvintes de evento aos botões e controles (mantido como está)
     // Ações de Arquivo
     elements.newDocBtn.addEventListener('click', newDocument);
-    elements.saveDocBtn.addEventListener('click', saveDocument);
-    elements.loadDocBtn.addEventListener('click', loadDocument);
+    if (elements.downloadOwdBtn) {
+        elements.downloadOwdBtn.addEventListener('click', exportAsOwd);
+    }
+    if (elements.uploadOwdInput) {
+        elements.uploadOwdInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) importFromOwd(file);
+            e.target.value = '';
+        });
+    }
+    if (elements.exportBtn && elements.exportMenu) {
+        elements.exportBtn.addEventListener('click', () => {
+            elements.exportMenu.classList.toggle('open');
+        });
+        document.addEventListener('click', (ev) => {
+            if (
+                !elements.exportMenu.contains(ev.target) &&
+                !elements.exportBtn.contains(ev.target)
+            ) {
+                elements.exportMenu.classList.remove('open');
+            }
+        });
+    }
+    if (elements.exportPdf) {
+        elements.exportPdf.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsPdf();
+        });
+    }
+    if (elements.exportDoc) {
+        elements.exportDoc.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsDoc();
+        });
+    }
+    if (elements.exportOdt) {
+        elements.exportOdt.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsOdt();
+        });
+    }
 
     // Desfazer/Refazer
     elements.undoBtn.addEventListener('click', () => applyCommand('undo'));
@@ -45,17 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.alignCenterBtn.addEventListener('click', () => applyCommand('justifyCenter')); // Corrigi o addEventListener
     elements.alignRightBtn.addEventListener('click', () => applyCommand('justifyRight'));
     elements.alignJustifyBtn.addEventListener('click', () => applyCommand('justifyFull'));
-    elements.indentBtn.addEventListener('click', () => applyCommand('indent'));
-    elements.outdentBtn.addEventListener('click', () => applyCommand('outdent'));
+    elements.indentBtn.addEventListener('click', () => adjustIndent(2));
+    elements.outdentBtn.addEventListener('click', () => adjustIndent(-2));
 
     // Inserir Objetos
     elements.quoteBtn.addEventListener('click', () => applyCommand('formatBlock', '<blockquote>'));
     elements.hrBtn.addEventListener('click', () => applyCommand('insertHorizontalRule'));
     elements.unorderedListBtn.addEventListener('click', () => applyCommand('insertUnorderedList'));
     elements.orderedListBtn.addEventListener('click', () => applyCommand('insertOrderedList'));
-    elements.createLinkBtn.addEventListener('click', createLink);
-    elements.insertImageBtn.addEventListener('click', insertImage);
-    elements.insertTableBtn.addEventListener('click', insertTable);
+    elements.createLinkBtn.addEventListener('click', openLinkModal);
+    elements.insertImageBtn.addEventListener('click', openImageModal);
+    elements.insertTableBtn.addEventListener('click', openTableModal);
 
     // Implementa atalhos de teclado (mantido como está)
     elements.editor.addEventListener('keydown', (event) => {
@@ -83,29 +148,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     event.preventDefault();
                     applyCommand('underline');
                     break;
-                case 's':
-                    event.preventDefault();
-                    saveDocument();
-                    break;
                 case 'L':
                     event.preventDefault();
-                    createLink();
+                    openLinkModal();
                     break;
                 case '[':
                     event.preventDefault();
-                    applyCommand('outdent');
+                    adjustIndent(-2);
                     break;
                 case ']':
                     event.preventDefault();
-                    applyCommand('indent');
+                    adjustIndent(2);
                     break;
                 case 'p':
                     event.preventDefault();
-                    insertImage();
+                    openImageModal();
                     break;
                 case 't':
                     event.preventDefault();
-                    insertTable();
+                    openTableModal();
                     break;
             }
         }

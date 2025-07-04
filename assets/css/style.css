@@ -11,6 +11,7 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     overflow-y: auto; /* Permite rolar a página inteira se o conteúdo for maior que a tela */
+    overflow-x: hidden; /* Evita barra horizontal indesejada */
 }
 
 .app-container {
@@ -61,7 +62,8 @@ body {
     outline: 1px solid #007bff;
 }
 
-.file-actions button {
+.file-actions button,
+.file-actions .file-upload-label {
     background-color: transparent;
     border: 1px solid #ccc;
     padding: 6px 12px;
@@ -75,10 +77,15 @@ body {
     gap: 5px;
 }
 
-.file-actions button:hover {
+.file-actions button:hover,
+.file-actions .file-upload-label:hover {
     background-color: #e6f7ff;
     border-color: #007bff;
     color: #007bff;
+}
+
+.file-actions .dropdown {
+    display: inline-block;
 }
 
 /* --- Estilos da Toolbar --- */
@@ -281,6 +288,9 @@ body {
 .paper-container {
     flex-grow: 1;
     overflow-y: auto; /* Permite rolagem interna do papel */
+    overflow-x: auto; /* Exibe scroll horizontal somente dentro do container */
+    width: 100%;
+    box-sizing: border-box;
     padding: 20px; /* Espaçamento ao redor do papel, dentro do container cinza */
     background-color: #f0f2f5; /* Fundo cinza claro que envolve o papel */
     display: flex;
@@ -293,7 +303,7 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para dar profundidade ao papel */
     border-radius: 4px;
     outline: none; /* Remove contorno de foco padrão do navegador */
-    line-height: 1.8;
+    line-height: var(--line-height, 1.8);
     font-size: 16px;
     color: #333;
     cursor: text;
@@ -314,6 +324,7 @@ body {
     /* Em vez disso, confiamos no justify-content: center do PARENT (.paper-container)
        e garantimos que este item seja centralizável como um flex-item */
     align-self: center; /* Centraliza este item especificamente dentro do flex container */
+    margin: 0 auto;
 
     /* Importante: a largura precisa ser definida pelo JS para que haja espaço para centralizar */
     /* Se você tem um min-height muito grande ou o conteúdo estica o papel, isso pode confundir */
@@ -321,7 +332,7 @@ body {
 
 /* --- Estilos para os elementos editáveis dentro do editor (H1, P, Listas, etc.) --- */
 .editor-area p {
-    margin-bottom: 1em;
+    margin-bottom: var(--paragraph-spacing, 1em);
 }
 
 .editor-area h1, .editor-area h2, .editor-area h3,
@@ -357,6 +368,11 @@ body {
     border: none;
     border-top: 1px solid #eee;
     margin: 20px 0;
+}
+
+.editor-area img {
+    max-width: 100%;
+    height: auto;
 }
 
 /* Estilos para a seleção de texto do navegador */
@@ -466,4 +482,71 @@ body {
 .form-group input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-footer button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    color: #555;
+}
+
+.modal-footer button:hover {
+    background-color: #e6f7ff;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.secondary-button {
+    background-color: #f5f5f5;
+}
+/* --- Dropdown para Espaçamento --- */
+.dropdown {
+    position: relative;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 5px;
+    z-index: 1100;
+}
+.dropdown-menu.open {
+    display: block;
+}
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    padding: 6px 10px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+}
+.dropdown-menu button:hover,
+.dropdown-menu button.active {
+    background-color: #e6f7ff;
+    color: #007bff;
+}
+.dropdown-menu hr {
+    margin: 5px 0;
+    border: 0;
+    border-top: 1px solid #eee;
 }
