@@ -314,6 +314,7 @@ body {
     /* Em vez disso, confiamos no justify-content: center do PARENT (.paper-container)
        e garantimos que este item seja centralizável como um flex-item */
     align-self: center; /* Centraliza este item especificamente dentro do flex container */
+    margin: 0 auto;
 
     /* Importante: a largura precisa ser definida pelo JS para que haja espaço para centralizar */
     /* Se você tem um min-height muito grande ou o conteúdo estica o papel, isso pode confundir */
