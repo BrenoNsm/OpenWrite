@@ -1,16 +1,19 @@
 // assets/js/main.js
 
 import { elements } from './modules/domElements.js';
-import { applyCommand, saveSelection, createLink, insertImage, insertTable } from './modules/commands.js';
+import { applyCommand, saveSelection, openLinkModal, openImageModal, openTableModal, initInsertModals } from './modules/commands.js';
 import { newDocument, saveDocument, loadDocument } from './modules/fileManager.js';
 import { updateToolbarState } from './modules/toolbarState.js';
 import { initColorPickers } from './utils/colorPicker.js';
 import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o módulo do modal
+import { initSpacingControls } from './modules/spacingControls.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa todos os módulos
     initColorPickers();
     initPageSetupModal(); // CHAMA APENAS A INICIALIZAÇÃO, NÃO O ABRE DIRETO
+    initSpacingControls();
+    initInsertModals();
 
     // Adiciona ouvintes de evento aos botões e controles (mantido como está)
     // Ações de Arquivo
@@ -53,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.hrBtn.addEventListener('click', () => applyCommand('insertHorizontalRule'));
     elements.unorderedListBtn.addEventListener('click', () => applyCommand('insertUnorderedList'));
     elements.orderedListBtn.addEventListener('click', () => applyCommand('insertOrderedList'));
-    elements.createLinkBtn.addEventListener('click', createLink);
-    elements.insertImageBtn.addEventListener('click', insertImage);
-    elements.insertTableBtn.addEventListener('click', insertTable);
+    elements.createLinkBtn.addEventListener('click', openLinkModal);
+    elements.insertImageBtn.addEventListener('click', openImageModal);
+    elements.insertTableBtn.addEventListener('click', openTableModal);
 
     // Implementa atalhos de teclado (mantido como está)
     elements.editor.addEventListener('keydown', (event) => {
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'L':
                     event.preventDefault();
-                    createLink();
+                    openLinkModal();
                     break;
                 case '[':
                     event.preventDefault();
@@ -101,11 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'p':
                     event.preventDefault();
-                    insertImage();
+                    openImageModal();
                     break;
                 case 't':
                     event.preventDefault();
-                    insertTable();
+                    openTableModal();
                     break;
             }
         }
