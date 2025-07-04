@@ -20,6 +20,7 @@ export const elements = {
     formatBlockSelect: document.getElementById('formatBlockSelect'),
     fontSizeSelect: document.getElementById('fontSizeSelect'),
 
+
     spacingBtn: document.getElementById('spacingBtn'),
     spacingMenu: document.getElementById('spacingMenu'),
     lineOptions: document.querySelectorAll('#spacingMenu .line-option'),
