@@ -1,6 +1,8 @@
 import { elements } from './domElements.js';
 
 const PX_PER_CM = 96 / 2.54;
+const MAX_ITERATIONS = 30; // evita loops infinitos quando o conteúdo é muito grande
+
 let currentSettings = {
     widthCm: 21,
     heightCm: 29.7,
@@ -41,7 +43,6 @@ const placeCaretAtStart = (el) => {
     sel.addRange(range);
 };
 
-
 const getLastTextNode = (node) => {
     if (!node) return null;
     if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
@@ -78,8 +79,13 @@ const splitTextNodeToFit = (page, textNode, maxHeightPx) => {
 const handleInput = (e) => {
     let page = e.currentTarget;
     const maxHeightPx = currentSettings.heightCm * PX_PER_CM;
+    let iterations = 0;
 
-    while (page.scrollHeight > maxHeightPx) {
+    while (page.scrollHeight > maxHeightPx && iterations < MAX_ITERATIONS) {
+        // Se a página tem apenas um filho e ainda está maior que o permitido,
+        // interrompe para evitar um loop infinito (conteúdo grande demais).
+        if (page.childNodes.length <= 1) break;
+
         let next = page.nextElementSibling;
         if (!next) next = createPage();
 
@@ -90,18 +96,22 @@ const handleInput = (e) => {
         if (remainder.textContent) {
             next.insertBefore(remainder, next.firstChild);
         } else {
-            // If nothing fits, move the entire node
+
+            // Se não couber nada, move o próprio nó
             next.insertBefore(textNode, next.firstChild);
         }
 
         placeCaretAtStart(next);
 
         if (next.scrollHeight > maxHeightPx) {
-            // Handle overflow in the next page as well
+
+            // Continua verificando a próxima página
             page = next;
         } else {
             break;
         }
+
+        iterations++;
 
     }
 };

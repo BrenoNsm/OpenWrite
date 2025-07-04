@@ -9,7 +9,6 @@ import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o m
 import { initSpacingControls } from './modules/spacingControls.js';
 import { initPagination } from './modules/pagination.js';
 
-
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa todos os módulos
     initColorPickers();
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPagination();
     initSpacingControls();
     initInsertModals();
-
 
     // Adiciona ouvintes de evento aos botões e controles (mantido como está)
     // Ações de Arquivo
