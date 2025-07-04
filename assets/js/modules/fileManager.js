@@ -82,6 +82,10 @@ export const exportAsPdf = () => {
         alert('Biblioteca jsPDF não carregada.');
         return;
     }
+    if (!window.html2canvas) {
+        alert('Biblioteca html2canvas não carregada.');
+        return;
+    }
     const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
 
     doc.html(elements.editor, {
