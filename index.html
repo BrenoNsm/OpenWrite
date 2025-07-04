@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Editor de Documentos</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="document-info">
+                <h1 contenteditable="true" spellcheck="false" class="document-title">Documento Sem Título</h1>
+                <div class="file-actions">
+                    <button id="newDocBtn" title="Novo Documento"><i class="fas fa-file"></i> Novo</button>
+                    <button id="saveDocBtn" title="Salvar Documento (Ctrl+S)"><i class="fas fa-save"></i> Salvar</button>
+                    <button id="loadDocBtn" title="Abrir Documento"><i class="fas fa-folder-open"></i> Abrir</button>
+                </div>
+            </div>
+
+            <div class="toolbar-wrapper">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button id="undoBtn" title="Desfazer (Ctrl+Z)"><i class="fas fa-undo"></i></button>
+                        <button id="redoBtn" title="Refazer (Ctrl+Y)"><i class="fas fa-redo"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <select id="formatBlockSelect" title="Estilo de Parágrafo">
+                            <option value="p">Parágrafo</option>
+                            <option value="h1">Título 1</option>
+                            <option value="h2">Título 2</option>
+                            <option value="h3">Título 3</option>
+                            <option value="h4">Título 4</option>
+                            <option value="h5">Título 5</option>
+                            <option value="h6">Título 6</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <select id="fontSizeSelect" title="Tamanho da Fonte">
+                            <option value="1">8pt</option>
+                            <option value="2">10pt</option>
+                            <option value="3" selected>12pt</option>
+                            <option value="4">14pt</option>
+                            <option value="5">18pt</option>
+                            <option value="6">24pt</option>
+                            <option value="7">36pt</option>
+                        </select>
+
+                        <div class="color-picker-container">
+                            <button id="foreColorBtn" class="color-indicator-button" title="Cor do Texto">
+                                <i class="fas fa-font"></i>
+                                <span class="color-indicator" style="background-color: #000000;"></span>
+                            </button>
+                            <div id="foreColorPalette" class="color-palette-popup">
+                                <div class="color-grid">
+                                    <div class="color-swatch" data-color="#000000" style="background-color: #000000;"></div>
+                                    <div class="color-swatch" data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></div>
+                                    <div class="color-swatch" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                                    <div class="color-swatch" data-color="#0000FF" style="background-color: #0000FF;"></div>
+                                    <div class="color-swatch" data-color="#008000" style="background-color: #008000;"></div>
+                                    <div class="color-swatch" data-color="#FFFF00" style="background-color: #FFFF00;"></div>
+                                    <div class="color-swatch" data-color="#FFA500" style="background-color: #FFA500;"></div>
+                                    <div class="color-swatch" data-color="#800080" style="background-color: #800080;"></div>
+                                    <div class="color-swatch" data-color="#4682B4" style="background-color: #4682B4;"></div>
+                                    <div class="color-swatch" data-color="#D2691E" style="background-color: #D2691E;"></div>
+                                    <div class="color-swatch" data-color="#808080" style="background-color: #808080;"></div>
+                                    <div class="color-swatch" data-color="#C0C0C0" style="background-color: #C0C0C0;"></div>
+                                </div>
+                                <div class="custom-color-row">
+                                    <input type="color" class="custom-color-input" value="#000000">
+                                    <span>Personalizar</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="color-picker-container">
+                            <button id="backColorBtn" class="color-indicator-button" title="Cor de Destaque">
+                                <i class="fas fa-highlighter"></i>
+                                <span class="color-indicator" style="background-color: #FFFF00;"></span>
+                            </button>
+                            <div id="backColorPalette" class="color-palette-popup">
+                                <div class="color-grid">
+                                    <div class="color-swatch" data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid #ccc;"></div>
+                                    <div class="color-swatch" data-color="#FFEB3B" style="background-color: #FFEB3B;"></div>
+                                    <div class="color-swatch" data-color="#FFC107" style="background-color: #FFC107;"></div>
+                                    <div class="color-swatch" data-color="#8BC34A" style="background-color: #8BC34A;"></div>
+                                    <div class="color-swatch" data-color="#03A9F4" style="background-color: #03A9F4;"></div>
+                                    <div class="color-swatch" data-color="#9C27B0" style="background-color: #9C27B0;"></div>
+                                    <div class="color-swatch" data-color="#E91E63" style="background-color: #E91E63;"></div>
+                                    <div class="color-swatch" data-color="#F44336" style="background-color: #F44336;"></div>
+                                    <div class="color-swatch" data-color="#9E9E9E" style="background-color: #9E9E9E;"></div>
+                                    <div class="color-swatch" data-color="#607D8B" style="background-color: #607D8B;"></div>
+                                </div>
+                                <div class="custom-color-row">
+                                    <input type="color" class="custom-color-input" value="#FFFF00">
+                                    <span>Personalizar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="boldBtn" title="Negrito (Ctrl+B)"><i class="fas fa-bold"></i></button>
+                        <button id="italicBtn" title="Itálico (Ctrl+I)"><i class="fas fa-italic"></i></button>
+                        <button id="underlineBtn" title="Sublinhado (Ctrl+U)"><i class="fas fa-underline"></i></button>
+                        <button id="strikethroughBtn" title="Tachado"><i class="fas fa-strikethrough"></i></button>
+                        <button id="subscriptBtn" title="Subscrito"><i class="fas fa-subscript"></i></button>
+                        <button id="superscriptBtn" title="Sobrescrito"><i class="fas fa-superscript"></i></button>
+                        <button id="removeFormatBtn" title="Remover Formatação"><i class="fas fa-eraser"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="unorderedListBtn" title="Lista Não Ordenada"><i class="fas fa-list-ul"></i></button>
+                        <button id="orderedListBtn" title="Lista Ordenada"><i class="fas fa-list-ol"></i></button>
+                        <button id="indentBtn" title="Aumentar Recuo"><i class="fas fa-indent"></i></button>
+                        <button id="outdentBtn" title="Diminuir Recuo"><i class="fas fa-outdent"></i></button>
+                        <button id="alignLeftBtn" title="Alinhar Esquerda"><i class="fas fa-align-left"></i></button>
+                        <button id="alignCenterBtn" title="Alinhar Centro"><i class="fas fa-align-center"></i></button>
+                        <button id="alignRightBtn" title="Alinhar Direita"><i class="fas fa-align-right"></i></button>
+                        <button id="alignJustifyBtn" title="Justificar"><i class="fas fa-align-justify"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="createLinkBtn" title="Inserir Link"><i class="fas fa-link"></i></button>
+                        <button id="insertImageBtn" title="Inserir Imagem"><i class="fas fa-image"></i></button>
+                        <button id="insertTableBtn" title="Inserir Tabela"><i class="fas fa-table"></i></button>
+                        <button id="hrBtn" title="Linha Horizontal"><i class="fas fa-minus"></i></button>
+                        <button id="quoteBtn" title="Citação em Bloco"><i class="fas fa-quote-right"></i></button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button id="pageSetupBtn" title="Configurar Página"><i class="fas fa-cog"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-container">
+            <div id="editor" class="editor-area" contenteditable="true" spellcheck="false">
+                <p>Este é o seu novo documento. Digite o conteúdo aqui, assim como você faria em uma folha de papel.</p>
+                <p>Experimente as novas ferramentas e o visual aprimorado!</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="pageSetupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Configuração da Página</h2>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pageOrientation">Orientação:</label>
+                    <select id="pageOrientation">
+                        <option value="portrait">Retrato</option>
+                        <option value="landscape">Paisagem</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pageSize">Tamanho do Papel:</label>
+                    <select id="pageSize">
+                        <option value="A4">A4 (21 x 29.7 cm)</option>
+                        <option value="Letter" selected>Carta (21.59 x 27.94 cm)</option>
+                        <option value="Legal">Ofício (21.59 x 35.56 cm)</option>
+                    </select>
+                </div>
+                <div class="form-group margin-group">
+                    <h3>Margens (cm):</h3>
+                    <div>
+                        <label for="marginTop">Superior:</label>
+                        <input type="number" id="marginTop" value="2.5" step="0.1" min="0">
+                    </div>
+                    <div>
+                        <label for="marginBottom">Inferior:</label>
+                        <input type="number" id="marginBottom" value="2.5" step="0.1" min="0">
+                    </div>
+                    <div>
+                        <label for="marginLeft">Esquerda:</label>
+                        <input type="number" id="marginLeft" value="3.0" step="0.1" min="0">
+                    </div>
+                    <div>
+                        <label for="marginRight">Direita:</label>
+                        <input type="number" id="marginRight" value="3.0" step="0.1" min="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="applyPageSetupBtn">Aplicar</button>
+                <button id="cancelPageSetupBtn" class="secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

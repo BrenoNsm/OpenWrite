@@ -1,0 +1,469 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* --- Estilos Gerais --- */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-y: auto; /* Permite rolar a página inteira se o conteúdo for maior que a tela */
+}
+
+.app-container {
+    width: 100%;
+    max-width: 100%; /* Permite que o container ocupe a largura total disponível */
+    background-color: #f0f2f5; /* Cor de fundo da área fora do "papel" */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-shadow: none; /* A sombra principal será aplicada ao "papel" */
+}
+
+/* --- Estilos do Header (cabeçalho fixo no topo) --- */
+.header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra suave para destacá-lo */
+    position: sticky; /* Torna o header "grudento" no topo */
+    top: 0;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+    padding-bottom: 5px; /* Espaço entre a info do doc e a toolbar */
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.document-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee; /* Separador sutil */
+}
+
+.document-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: text;
+    white-space: nowrap; /* Impede quebra de linha */
+    overflow: hidden; /* Esconde texto que excede a largura */
+    text-overflow: ellipsis; /* Adiciona "..." para texto excedente */
+    max-width: 400px; /* Limita a largura do título */
+}
+
+.document-title:focus {
+    background-color: #e6f7ff;
+    outline: 1px solid #007bff;
+}
+
+.file-actions button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    color: #555;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.file-actions button:hover {
+    background-color: #e6f7ff;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+/* --- Estilos da Toolbar --- */
+.toolbar-wrapper {
+    box-shadow: none; /* A sombra está no .header */
+    padding-bottom: 0;
+    border-bottom: none;
+    padding-top: 5px; /* Espaço entre as ações de arquivo e a toolbar */
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px 20px;
+    background-color: #ffffff;
+    gap: 10px;
+    justify-content: center; /* Centraliza os grupos de botões */
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* Espaçamento menor entre botões para um visual compacto */
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.toolbar-group:not(:last-child) {
+    border-right: 1px solid #e0e6ed; /* Separador visual entre grupos */
+    padding-right: 12px;
+}
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+/* Estilos para Botões da Toolbar */
+.toolbar button {
+    background-color: transparent;
+    border: none;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 18px; /* Ícones maiores */
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar button:hover {
+    background-color: #e6f7ff;
+    color: #007bff;
+}
+
+.toolbar button.active {
+    background-color: #007bff;
+    color: #ffffff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Estilos para Selects na Toolbar */
+.toolbar select {
+    padding: 6px 8px;
+    border: 1px solid #c9d6e4;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    /* Remover aparência padrão do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /* Propriedade padronizada */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="#333" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Seta customizada */
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+    min-width: 70px;
+}
+
+.toolbar select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+/* --- ESTILOS PARA O SELETOR DE CORES PERSONALIZADO --- */
+.color-picker-container {
+    position: relative; /* Para posicionar o popup */
+    display: inline-block; /* Para que o container se ajuste ao botão */
+    vertical-align: middle; /* Alinha com outros elementos da toolbar */
+}
+
+.color-indicator-button {
+    position: relative;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 18px;
+    color: #555;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.color-indicator-button:hover {
+    background-color: #e6f7ff;
+    color: #007bff;
+}
+
+.color-indicator {
+    width: 14px; /* Tamanho da linha de cor */
+    height: 3px;
+    border-radius: 1px;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 0.5px solid rgba(0,0,0,0.1);
+}
+
+.color-palette-popup {
+    position: absolute;
+    top: calc(100% + 5px); /* Abaixo do botão */
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 10px;
+    display: none; /* OCULTO POR PADRÃO VIA CSS */
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1100; /* Acima da toolbar */
+}
+
+.color-palette-popup.open {
+    display: flex; /* MOSTRADO QUANDO A CLASSE 'OPEN' É ADICIONADA VIA JS */
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 colunas de cores */
+    gap: 5px;
+}
+
+.color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.1s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+}
+
+.custom-color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+
+.custom-color-input {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    /* Remover aparência padrão do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /* Propriedade padronizada */
+    overflow: hidden;
+}
+
+.custom-color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+.custom-color-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+/* --- FIM DOS ESTILOS PARA O SELETOR DE CORES --- */
+
+
+/* --- Contêiner da "folha de papel" e Área de Edição --- */
+.paper-container {
+    flex-grow: 1;
+    overflow-y: auto; /* Permite rolagem interna do papel */
+    padding: 20px; /* Espaçamento ao redor do papel, dentro do container cinza */
+    background-color: #f0f2f5; /* Fundo cinza claro que envolve o papel */
+    display: flex;
+    justify-content: center; /* Centraliza o papel horizontalmente (como flex-items) */
+    align-items: flex-start; /* Alinha o papel ao topo */
+}
+
+.editor-area {
+    background-color: #ffffff; /* Cor branca do "papel" */
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para dar profundidade ao papel */
+    border-radius: 4px;
+    outline: none; /* Remove contorno de foco padrão do navegador */
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    cursor: text;
+    
+    /* PROPRIEDADES QUE SERÃO DEFINIDAS EXCLUSIVAMENTE PELO JAVASCRIPT EM CM */
+    /* Removido: width: auto; */
+    /* Removido: min-width: 21cm; */
+    min-height: auto; /* Permite que JS defina a altura mínima */
+    padding: 0; /* Remove padding padrão, JS define as margens em CM */
+
+    /* Importante para flexbox: impede que o editor-area encolha ou cresça de forma indesejada */
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box; /* Garante que padding seja incluído na largura/altura total */
+
+    /* CORREÇÃO PARA CENTRALIZAR USANDO FLEXBOX NO PRÓPRIO ITEM */
+    /* Removemos display: block; e margin: 0 auto; daqui */
+    /* Em vez disso, confiamos no justify-content: center do PARENT (.paper-container)
+       e garantimos que este item seja centralizável como um flex-item */
+    align-self: center; /* Centraliza este item especificamente dentro do flex container */
+
+    /* Importante: a largura precisa ser definida pelo JS para que haja espaço para centralizar */
+    /* Se você tem um min-height muito grande ou o conteúdo estica o papel, isso pode confundir */
+}
+
+/* --- Estilos para os elementos editáveis dentro do editor (H1, P, Listas, etc.) --- */
+.editor-area p {
+    margin-bottom: 1em;
+}
+
+.editor-area h1, .editor-area h2, .editor-area h3,
+.editor-area h4, .editor-area h5, .editor-area h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+.editor-area h1 { font-size: 2.2em; color: #2c3e50; }
+.editor-area h2 { font-size: 1.8em; color: #34495e; }
+.editor-area h3 { font-size: 1.5em; color: #34495e; }
+.editor-area h4 { font-size: 1.2em; color: #34495e; }
+.editor-area h5 { font-size: 1.1em; color: #34495e; }
+.editor-area h6 { font-size: 1.0em; color: #34495e; }
+
+.editor-area ul, .editor-area ol {
+    margin-left: 20px;
+    margin-bottom: 1em;
+}
+
+.editor-area blockquote {
+    border-left: 4px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    font-style: italic;
+    color: #666;
+    background-color: #f9f9f9;
+}
+
+.editor-area hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* Estilos para a seleção de texto do navegador */
+::selection {
+    background-color: #b3d4fc;
+    color: #000;
+}
+::-moz-selection {
+    background-color: #b3d4fc;
+    color: #000;
+}
+
+/* --- Estilos para o Modal de Configuração da Página --- */
+.modal {
+    display: none; /* ESSENCIAL: Oculto por padrão, visível apenas com .open */
+    position: fixed;
+    z-index: 2000; /* Garante que o modal fique acima de tudo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilita rolagem se o conteúdo do modal for muito grande */
+    background-color: rgba(0,0,0,0.4); /* Fundo escuro semi-transparente */
+    
+    /* Para centralizar o conteúdo do modal quando ele estiver visível */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.open {
+    display: flex; /* MOSTRAR O MODAL APENAS QUANDO O JS ADICIONAR ESTA CLASSE */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Para centralização fallback e margin automática */
+    padding: 25px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.6em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.form-group select,
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+    /* Remover aparência padrão do navegador para todos */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Para remover as setas em input type="number" */
+.form-group input[type="number"]::-webkit-outer-spin-button,
+.form-group input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
