@@ -62,7 +62,8 @@ body {
     outline: 1px solid #007bff;
 }
 
-.file-actions button {
+.file-actions button,
+.file-actions .file-upload-label {
     background-color: transparent;
     border: 1px solid #ccc;
     padding: 6px 12px;
@@ -76,10 +77,15 @@ body {
     gap: 5px;
 }
 
-.file-actions button:hover {
+.file-actions button:hover,
+.file-actions .file-upload-label:hover {
     background-color: #e6f7ff;
     border-color: #007bff;
     color: #007bff;
+}
+
+.file-actions .dropdown {
+    display: inline-block;
 }
 
 /* --- Estilos da Toolbar --- */

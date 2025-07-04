@@ -6,6 +6,13 @@ export const elements = {
     newDocBtn: document.getElementById('newDocBtn'),
     saveDocBtn: document.getElementById('saveDocBtn'),
     loadDocBtn: document.getElementById('loadDocBtn'),
+    downloadOwdBtn: document.getElementById('downloadOwdBtn'),
+    uploadOwdInput: document.getElementById('uploadOwdInput'),
+    exportBtn: document.getElementById('exportBtn'),
+    exportMenu: document.getElementById('exportMenu'),
+    exportPdf: document.getElementById('exportPdf'),
+    exportDoc: document.getElementById('exportDoc'),
+    exportOdt: document.getElementById('exportOdt'),
 
     // Formatação de Caracteres
     boldBtn: document.getElementById('boldBtn'),

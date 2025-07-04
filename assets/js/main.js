@@ -2,7 +2,16 @@
 
 import { elements } from './modules/domElements.js';
 import { applyCommand, saveSelection, openLinkModal, openImageModal, openTableModal, initInsertModals } from './modules/commands.js';
-import { newDocument, saveDocument, loadDocument } from './modules/fileManager.js';
+import {
+    newDocument,
+    saveDocument,
+    loadDocument,
+    exportAsOwd,
+    importFromOwd,
+    exportAsPdf,
+    exportAsDoc,
+    exportAsOdt,
+} from './modules/fileManager.js';
 import { updateToolbarState } from './modules/toolbarState.js';
 import { initColorPickers } from './utils/colorPicker.js';
 import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o módulo do modal
@@ -20,6 +29,47 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.newDocBtn.addEventListener('click', newDocument);
     elements.saveDocBtn.addEventListener('click', saveDocument);
     elements.loadDocBtn.addEventListener('click', loadDocument);
+    if (elements.downloadOwdBtn) {
+        elements.downloadOwdBtn.addEventListener('click', exportAsOwd);
+    }
+    if (elements.uploadOwdInput) {
+        elements.uploadOwdInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) importFromOwd(file);
+            e.target.value = '';
+        });
+    }
+    if (elements.exportBtn && elements.exportMenu) {
+        elements.exportBtn.addEventListener('click', () => {
+            elements.exportMenu.classList.toggle('open');
+        });
+        document.addEventListener('click', (ev) => {
+            if (
+                !elements.exportMenu.contains(ev.target) &&
+                !elements.exportBtn.contains(ev.target)
+            ) {
+                elements.exportMenu.classList.remove('open');
+            }
+        });
+    }
+    if (elements.exportPdf) {
+        elements.exportPdf.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsPdf();
+        });
+    }
+    if (elements.exportDoc) {
+        elements.exportDoc.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsDoc();
+        });
+    }
+    if (elements.exportOdt) {
+        elements.exportOdt.addEventListener('click', () => {
+            elements.exportMenu.classList.remove('open');
+            exportAsOdt();
+        });
+    }
 
     // Desfazer/Refazer
     elements.undoBtn.addEventListener('click', () => applyCommand('undo'));
