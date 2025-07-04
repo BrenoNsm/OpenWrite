@@ -20,6 +20,12 @@ export const elements = {
     formatBlockSelect: document.getElementById('formatBlockSelect'),
     fontSizeSelect: document.getElementById('fontSizeSelect'),
 
+    spacingBtn: document.getElementById('spacingBtn'),
+    spacingMenu: document.getElementById('spacingMenu'),
+    lineOptions: document.querySelectorAll('#spacingMenu .line-option'),
+    increaseSpacing: document.getElementById('increaseSpacing'),
+    decreaseSpacing: document.getElementById('decreaseSpacing'),
+
     // Elementos para os seletores de cor personalizados
     foreColorBtn: document.getElementById('foreColorBtn'),
     foreColorIndicator: document.getElementById('foreColorBtn').querySelector('.color-indicator'),
@@ -66,6 +72,23 @@ export const elements = {
     marginRight: document.getElementById('marginRight'),
     applyPageSetupBtn: document.getElementById('applyPageSetupBtn'),
     cancelPageSetupBtn: document.getElementById('cancelPageSetupBtn'),
+
+    // Modais de Inserção
+    linkModal: document.getElementById('linkModal'),
+    linkUrl: document.getElementById('linkUrl'),
+    confirmInsertLink: document.getElementById('confirmInsertLink'),
+    cancelInsertLink: document.getElementById('cancelInsertLink'),
+
+    imageModal: document.getElementById('imageModal'),
+    imageUrl: document.getElementById('imageUrl'),
+    confirmInsertImage: document.getElementById('confirmInsertImage'),
+    cancelInsertImage: document.getElementById('cancelInsertImage'),
+
+    tableModal: document.getElementById('tableModal'),
+    tableRows: document.getElementById('tableRows'),
+    tableCols: document.getElementById('tableCols'),
+    confirmInsertTable: document.getElementById('confirmInsertTable'),
+    cancelInsertTable: document.getElementById('cancelInsertTable'),
 
     // NOVO: Referência ao paper-container para ajustar maxWidth
     paperContainer: document.querySelector('.paper-container'), // <-- ESTE É IMPORTANTE PARA O LAYOUT
