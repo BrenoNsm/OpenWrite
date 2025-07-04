@@ -107,22 +107,20 @@ export const exportAsPdf = () => {
         alert('Biblioteca html2canvas não carregada.');
         return;
     }
-    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
-    const tempDiv = document.createElement('div');
-    const cleaned = getCleanText();
-    cleaned.split(/\n{2,}/).forEach((p) => {
-        const para = document.createElement('p');
-        para.textContent = p;
-        tempDiv.appendChild(para);
-    });
+
+    const doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
 
     doc.html(tempDiv, {
         callback: () => {
             doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
         },
-        x: 40,
-        y: 40,
-        html2canvas: { scale: 0.8 },
+        x: 10,
+        y: 10,
+        width: pageWidth - 20,
+        windowWidth: elements.editor.scrollWidth,
+        html2canvas: { scale: 1 },
+
     });
 };
 
