@@ -11,6 +11,7 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     overflow-y: auto; /* Permite rolar a página inteira se o conteúdo for maior que a tela */
+    overflow-x: hidden; /* Evita barra horizontal indesejada */
 }
 
 .app-container {
@@ -281,6 +282,9 @@ body {
 .paper-container {
     flex-grow: 1;
     overflow-y: auto; /* Permite rolagem interna do papel */
+    overflow-x: auto; /* Exibe scroll horizontal somente dentro do container */
+    width: 100%;
+    box-sizing: border-box;
     padding: 20px; /* Espaçamento ao redor do papel, dentro do container cinza */
     background-color: #f0f2f5; /* Fundo cinza claro que envolve o papel */
     display: flex;

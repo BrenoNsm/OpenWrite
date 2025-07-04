@@ -56,24 +56,22 @@ const applyPageSettingsToEditor = () => {
         editorHeight = paper.width;
     }
 
-    // Garante que o container do papel tenha largura total
-    elements.paperContainer.style.maxWidth = "100%";
 
-    const pages = elements.editor.querySelectorAll('.editor-area');
-    pages.forEach(page => {
-        page.style.width = `${editorWidth}cm`;
-        page.style.minHeight = `${editorHeight}cm`;
-        page.style.paddingTop = `${margins.top}cm`;
-        page.style.paddingBottom = `${margins.bottom}cm`;
-        page.style.paddingLeft = `${margins.left}cm`;
-        page.style.paddingRight = `${margins.right}cm`;
-    });
+    // AQUI É A PARTE CRÍTICA DO JAVASCRIPT
+    // Garante que o container do papel ocupe toda a largura disponível
+    // e limita o editor ao tamanho de papel configurado
+    elements.paperContainer.style.maxWidth = '100%';
+    elements.editor.style.width = '100%';
+    elements.editor.style.maxWidth = `${editorWidth}cm`;
 
-    updatePageSettings({
-        widthCm: editorWidth,
-        heightCm: editorHeight,
-        margins
-    });
+    elements.editor.style.minHeight = `${editorHeight}cm`; // Altura mínima do papel
+
+    // Aplica as margens ao padding do editor-area
+    elements.editor.style.paddingTop = `${margins.top}cm`;
+    elements.editor.style.paddingBottom = `${margins.bottom}cm`;
+    elements.editor.style.paddingLeft = `${margins.left}cm`;
+    elements.editor.style.paddingRight = `${margins.right}cm`;
+
 
     updateToolbarState();
 };
