@@ -41,29 +41,67 @@ const placeCaretAtStart = (el) => {
     sel.addRange(range);
 };
 
+
+const getLastTextNode = (node) => {
+    if (!node) return null;
+    if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
+        return node;
+    }
+    for (let i = node.childNodes.length - 1; i >= 0; i--) {
+        const child = getLastTextNode(node.childNodes[i]);
+        if (child) return child;
+    }
+    return null;
+};
+
+const splitTextNodeToFit = (page, textNode, maxHeightPx) => {
+    const original = textNode.textContent;
+    let low = 0;
+    let high = original.length;
+    let index = 0;
+
+    while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        textNode.textContent = original.slice(0, mid);
+        if (page.scrollHeight > maxHeightPx) {
+            high = mid - 1;
+        } else {
+            index = mid;
+            low = mid + 1;
+        }
+    }
+
+    textNode.textContent = original.slice(0, index);
+    return document.createTextNode(original.slice(index));
+};
+
 const handleInput = (e) => {
-    const page = e.currentTarget;
+    let page = e.currentTarget;
     const maxHeightPx = currentSettings.heightCm * PX_PER_CM;
 
-    if (page.scrollHeight <= maxHeightPx) return;
+    while (page.scrollHeight > maxHeightPx) {
+        let next = page.nextElementSibling;
+        if (!next) next = createPage();
 
-    let next = page.nextElementSibling;
-    if (!next) next = createPage();
+        const textNode = getLastTextNode(page);
+        if (!textNode) break;
 
-    const sel = window.getSelection();
-    if (!sel.rangeCount) return;
-    const range = sel.getRangeAt(0);
-    if (!page.contains(range.startContainer)) return;
+        const remainder = splitTextNodeToFit(page, textNode, maxHeightPx);
+        if (remainder.textContent) {
+            next.insertBefore(remainder, next.firstChild);
+        } else {
+            // If nothing fits, move the entire node
+            next.insertBefore(textNode, next.firstChild);
+        }
 
-    const overflow = range.cloneRange();
-    overflow.setEndAfter(page.lastChild);
-    const fragment = overflow.extractContents();
-    next.insertBefore(fragment, next.firstChild);
+        placeCaretAtStart(next);
 
-    placeCaretAtStart(next);
-
-    if (page.scrollHeight > maxHeightPx) {
-        handleInput({ currentTarget: page });
+        if (next.scrollHeight > maxHeightPx) {
+            // Handle overflow in the next page as well
+            page = next;
+        } else {
+            break;
+        }
 
     }
 };

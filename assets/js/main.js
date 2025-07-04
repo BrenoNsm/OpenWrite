@@ -18,10 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSpacingControls();
     initInsertModals();
 
-    initPagination();
-
-    initSpacingControls();
-    initInsertModals();
 
     // Adiciona ouvintes de evento aos botões e controles (mantido como está)
     // Ações de Arquivo

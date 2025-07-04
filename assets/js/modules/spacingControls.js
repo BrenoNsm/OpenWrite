@@ -69,7 +69,9 @@ export const initSpacingControls = () => {
         elements.increaseSpacing.addEventListener('click', () => {
             const value = parseFloat(currentSettings.paragraphSpacing);
             currentSettings.paragraphSpacing = `${(value + 0.5).toFixed(1)}em`;
-tings();
+
+            applySettings();
+
             saveSettings();
         });
     }
