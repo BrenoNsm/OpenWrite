@@ -77,23 +77,6 @@ export const importFromOwd = (file) => {
     reader.readAsText(file);
 };
 
-export const exportAsPdf = () => {
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert('Biblioteca jsPDF não carregada.');
-        return;
-    }
-    const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
-
-    doc.html(elements.editor, {
-        callback: () => {
-            doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
-        },
-        x: 40,
-        y: 40,
-        html2canvas: { scale: 0.8 },
-
-    });
-};
 
 export const exportAsDoc = () => {
     const html = `<html><head><meta charset="utf-8"></head><body>${elements.editor.innerHTML}</body></html>`;

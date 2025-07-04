@@ -6,7 +6,6 @@ import {
     newDocument,
     exportAsOwd,
     importFromOwd,
-    exportAsPdf,
     exportAsDoc,
     exportAsOdt,
 } from './modules/fileManager.js';
@@ -62,12 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ) {
                 elements.exportMenu.classList.remove('open');
             }
-        });
-    }
-    if (elements.exportPdf) {
-        elements.exportPdf.addEventListener('click', () => {
-            elements.exportMenu.classList.remove('open');
-            exportAsPdf();
         });
     }
     if (elements.exportDoc) {
