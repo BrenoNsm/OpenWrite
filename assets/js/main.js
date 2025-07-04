@@ -9,11 +9,17 @@ import { initPageSetupModal } from './modules/pageSetupModal.js'; // Importa o m
 import { initSpacingControls } from './modules/spacingControls.js';
 import { initPagination } from './modules/pagination.js';
 
+
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa todos os módulos
     initColorPickers();
     initPageSetupModal(); // CHAMA APENAS A INICIALIZAÇÃO, NÃO O ABRE DIRETO
     initPagination();
+    initSpacingControls();
+    initInsertModals();
+
+    initPagination();
+
     initSpacingControls();
     initInsertModals();
 

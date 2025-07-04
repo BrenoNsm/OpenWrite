@@ -56,6 +56,7 @@ const applyPageSettingsToEditor = () => {
         editorHeight = paper.width;
     }
 
+
     // Garante que o container do papel tenha largura total
     elements.paperContainer.style.maxWidth = "100%";
 
@@ -74,6 +75,7 @@ const applyPageSettingsToEditor = () => {
         heightCm: editorHeight,
         margins
     });
+
 
     updateToolbarState();
 };

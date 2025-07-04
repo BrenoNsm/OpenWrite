@@ -44,6 +44,7 @@ const placeCaretAtStart = (el) => {
 const handleInput = (e) => {
     const page = e.currentTarget;
     const maxHeightPx = currentSettings.heightCm * PX_PER_CM;
+
     if (page.scrollHeight <= maxHeightPx) return;
 
     let next = page.nextElementSibling;
@@ -63,6 +64,7 @@ const handleInput = (e) => {
 
     if (page.scrollHeight > maxHeightPx) {
         handleInput({ currentTarget: page });
+
     }
 };
 
