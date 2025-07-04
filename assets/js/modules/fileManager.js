@@ -4,6 +4,27 @@ import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js'; // Precisará desta importação
 import { createPage, attachPageEvents } from './pagination.js';
 
+const getCleanText = () => {
+    let text = elements.editor.innerText || '';
+    text = text.replace(/\u00A0/g, ' ');
+    text = text.replace(/ {2,}/g, ' ');
+    const lines = text.split(/\r?\n/);
+    const result = [];
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed === '') {
+            if (result.length && result[result.length - 1] !== '') {
+                result.push('');
+            }
+        } else if (result.length && result[result.length - 1] !== '') {
+            result[result.length - 1] += ' ' + trimmed;
+        } else {
+            result.push(trimmed);
+        }
+    }
+    return result.join('\n\n');
+};
+
 export const newDocument = () => {
     if (confirm('Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.')) {
         elements.editor.innerHTML = '<p><br></p>';
@@ -76,7 +97,6 @@ export const importFromOwd = (file) => {
     };
     reader.readAsText(file);
 };
-
 
 export const exportAsDoc = () => {
     const html = `<html><head><meta charset="utf-8"></head><body>${elements.editor.innerHTML}</body></html>`;
