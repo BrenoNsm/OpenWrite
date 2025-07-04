@@ -2,6 +2,7 @@
 
 import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js';
+import { updatePageSettings } from './pagination.js';
 
 // Configurações padrão ABNT (cm)
 let currentPageSettings = {
@@ -55,6 +56,7 @@ const applyPageSettingsToEditor = () => {
         editorHeight = paper.width;
     }
 
+
     // AQUI É A PARTE CRÍTICA DO JAVASCRIPT
     // Garante que o container do papel ocupe toda a largura disponível
     // e limita o editor ao tamanho de papel configurado
@@ -69,6 +71,7 @@ const applyPageSettingsToEditor = () => {
     elements.editor.style.paddingBottom = `${margins.bottom}cm`;
     elements.editor.style.paddingLeft = `${margins.left}cm`;
     elements.editor.style.paddingRight = `${margins.right}cm`;
+
 
     updateToolbarState();
 };

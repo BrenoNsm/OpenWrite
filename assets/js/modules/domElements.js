@@ -86,7 +86,7 @@ export const elements = {
 
     imageModal: document.getElementById('imageModal'),
     imageUrl: document.getElementById('imageUrl'),
-    imageFile: document.getElementById('imageFile'),
+
     confirmInsertImage: document.getElementById('confirmInsertImage'),
     cancelInsertImage: document.getElementById('cancelInsertImage'),
 

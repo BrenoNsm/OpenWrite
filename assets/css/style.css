@@ -298,6 +298,12 @@ body {
     align-items: flex-start; /* Alinha o papel ao topo */
 }
 
+.editor-pages {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Espaço entre páginas */
+}
+
 .editor-area {
     background-color: #ffffff; /* Cor branca do "papel" */
     box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para dar profundidade ao papel */

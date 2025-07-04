@@ -2,6 +2,7 @@
 
 import { elements } from './domElements.js';
 import { updateToolbarState } from './toolbarState.js'; // Precisará desta importação
+import { createPage, attachPageEvents } from './pagination.js';
 
 export const newDocument = () => {
     if (confirm('Você quer criar um novo documento? Quaisquer alterações não salvas serão perdidas.')) {
@@ -82,6 +83,7 @@ export const exportAsPdf = () => {
         return;
     }
     const doc = new window.jspdf.jsPDF('p', 'pt', 'a4');
+
     doc.html(elements.editor, {
         callback: () => {
             doc.save(`${elements.documentTitle.textContent || 'documento'}.pdf`);
@@ -89,6 +91,7 @@ export const exportAsPdf = () => {
         x: 40,
         y: 40,
         html2canvas: { scale: 0.8 },
+
     });
 };
 
@@ -128,6 +131,7 @@ export const loadDocument = () => {
             const documentData = JSON.parse(localStorage.getItem(`editor_doc_${docToLoad}`));
             if (documentData && documentData.content) {
                 elements.editor.innerHTML = documentData.content;
+                elements.editor.querySelectorAll('.editor-area').forEach(attachPageEvents);
                 elements.documentTitle.textContent = documentData.title || docToLoad;
                 updateToolbarState(); // Atualiza a toolbar para o documento carregado
                 alert(`Documento "${docToLoad}" carregado com sucesso!`);
